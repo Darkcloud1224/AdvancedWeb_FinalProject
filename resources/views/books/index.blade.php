@@ -48,7 +48,7 @@
                                     @foreach ($books as $book)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                
+                                            <td></td>
                                             <td>
                                                 <a href="{{ route('borrowings.edit', $book->id) }}" class="btn btn-sm btn-primary">Edit</a>
                                                 <form action="{{ route('borrowings.destroy', $book->id) }}" method="POST" class="d-inline">
