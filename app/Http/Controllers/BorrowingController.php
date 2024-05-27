@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Borrowing;
@@ -35,7 +36,7 @@ class BorrowingController extends Controller
         $book->is_available = false;
         $book->save();
 
-        return redirect()->route('borrowings.index');
+        return redirect()->route('borrowings.index')->with('success', 'Borrowing added successfully.');
     }
 
     public function edit(Borrowing $borrowing)
@@ -62,13 +63,13 @@ class BorrowingController extends Controller
             $book->save();
         }
 
-        return redirect()->route('borrowings.index');
+        return redirect()->route('borrowings.index')->with('success', 'Borrowing updated successfully.');
     }
 
     public function destroy(Borrowing $borrowing)
     {
         $borrowing->delete();
-        return redirect()->route('borrowings.index');
+        return redirect()->route('borrowings.index')->with('success', 'Borrowing deleted successfully.');
     }
 
     public function search(Request $request)

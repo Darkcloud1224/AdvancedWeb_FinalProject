@@ -29,14 +29,7 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-            'publisher' => 'required|string|max:255',
-            'published_year' => 'required|integer|min:1000|max:' . date('Y'),
-            'category' => 'required|string|max:255',
-        ]);
-
+    
         $newBook = new Book;
         $newBook->title = $request->title;
         $newBook->author = $request->author;
@@ -69,14 +62,6 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-            'publisher' => 'required|string|max:255',
-            'published_year' => 'required|integer|min:1000|max:' . date('Y'),
-            'category' => 'required|string|max:255',
-        ]);
-
         $book->title = $request->title;
         $book->author = $request->author;
         $book->publisher = $request->publisher;

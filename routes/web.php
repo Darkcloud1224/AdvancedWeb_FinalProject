@@ -39,23 +39,23 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/borrowings/{borrowing}', 'destroy')->name('borrowings.destroy');
         Route::get('/borrowings/search', 'search')->name('borrowings.search');
     });
-    /*Route::controller(VolunteerController::class)->group(function () {
+    Route::controller(VolunteerController::class)->group(function () {
         Route::get('/volunteers', 'index')->name('volunteers.index');
         Route::get('/volunteers/create', 'create')->name('volunteers.create');
         Route::post('/volunteers', 'store')->name('volunteers.store');
         Route::get('/volunteers/{volunteer}/edit', 'edit')->name('volunteers.edit');
         Route::put('/volunteers/{volunteer}', 'update')->name('volunteers.update');
         Route::delete('/volunteers/{volunteer}', 'destroy')->name('volunteers.destroy');
-    });*/
+    });
     
-    /*Route::controller(BookController::class)->group(function () {
+    Route::controller(BookController::class)->group(function () {
         Route::get('/books', 'index')->name('books.index');
         Route::get('/books/create', 'create')->name('books.create');
         Route::post('/books', 'store')->name('books.store');
         Route::get('/books/{book}/edit', 'edit')->name('books.edit');
         Route::put('/books/{book}', 'update')->name('books.update');
         Route::delete('/books/{book}', 'destroy')->name('books.destroy');
-    });*/
+    });
     
     /*Route::controller(MemberController::class)->group(function () {
         Route::get('/members', 'index')->name('members.index');

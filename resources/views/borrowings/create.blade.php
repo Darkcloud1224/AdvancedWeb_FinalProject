@@ -28,8 +28,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="borrowing_date">Borrowing Date</label>
-                                <input type="date" name="borrowing_date" id="borrowing_date" class="form-control"
-                                    required>
+                                <input type="date" name="borrowing_date" id="borrowing_date" class="form-control" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Add Borrowing</button>
                         </form>
