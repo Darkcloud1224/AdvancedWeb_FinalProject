@@ -6,7 +6,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\SupervisorController;
-
+use App\Models\Borrowing;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +30,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('volunteers', VolunteerController::class);
     Route::resource('books', BookController::class);
     Route::resource('members', MemberController::class);
-    Route::controller(BorrowingController::class)->group(function () {
+    Route::resource('borrowings', BorrowingController::class);
+    /*Route::controller(BorrowingController::class)->group(function () {
         Route::get('/borrowings', 'index')->name('borrowings.index');
         Route::get('/borrowings/create', 'create')->name('borrowings.create');
         Route::post('/borrowings', 'store')->name('borrowings.store');
@@ -46,9 +47,28 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/volunteers/{volunteer}/edit', 'edit')->name('volunteers.edit');
         Route::put('/volunteers/{volunteer}', 'update')->name('volunteers.update');
         Route::delete('/volunteers/{volunteer}', 'destroy')->name('volunteers.destroy');
-    });
+    });*/
+
+
+    Route::resource('supervisor', SupervisorController::class);
+    Route::get('/supervisor/volunteers/create', [SupervisorController::class, 'createVolunteer'])->name('supervisor.volunteers.create');
+    Route::get('/supervisor/volunteers', [SupervisorController::class, 'index'])->name('supervisor.index');
+    Route::post('/supervisor/volunteers', [SupervisorController::class, 'storeVolunteer'])->name('supervisor.volunteers.store');
+    Route::get('/supervisor/volunteers/{volunteer}/edit', [SupervisorController::class, 'editVolunteer'])->name('supervisor.volunteers.edit');
+    Route::put('/supervisor/volunteers/{volunteer}', [SupervisorController::class, 'updateVolunteer'])->name('supervisor.volunteers.update');
+    Route::delete('/supervisor/volunteers/{volunteer}', [SupervisorController::class, 'destroyVolunteer'])->name('supervisor.volunteers.destroy');
+
+    // Resource routes for members
+    Route::get('/supervisor/members', [SupervisorController::class, 'index'])->name('supervisor.index');
+    Route::get('/supervisor/members/create', [SupervisorController::class, 'createMember'])->name('supervisor.members.create');
+    Route::post('/supervisor/members', [SupervisorController::class, 'storeMember'])->name('supervisor.members.store');
+    Route::get('/supervisor/members/{member}/edit', [SupervisorController::class, 'editMember'])->name('supervisor.members.edit');
+    Route::put('/supervisor/members/{member}', [SupervisorController::class, 'updateMember'])->name('supervisor.members.update');
+    Route::delete('/supervisor/members/{member}', [SupervisorController::class, 'destroyMember'])->name('supervisor.members.destroy');
+
     
-    Route::controller(BookController::class)->group(function () {
+    
+    /*Route::controller(BookController::class)->group(function () {
         Route::get('/books', 'index')->name('books.index');
         Route::get('/books/create', 'create')->name('books.create');
         Route::post('/books', 'store')->name('books.store');
