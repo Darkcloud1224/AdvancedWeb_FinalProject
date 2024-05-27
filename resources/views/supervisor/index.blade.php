@@ -60,9 +60,7 @@
                 </div>
             </div>
 
-            <!-- Members Tab -->
             <div class="tab-pane fade" id="members" role="tabpanel" aria-labelledby="members-tab">
-                <!-- Members Content -->
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <div class="card">
@@ -85,7 +83,7 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $member->name }}</td>
                                                 <td>{{ $member->email }}</td>
-                                                <td>{{ $member->ic_no }}</td>
+                                                <td>{{ $member->ic_number }}</td>
                                                 <td>
                                                     <a href="{{ route('supervisor.members.edit', $member->id) }}" class="btn btn-sm btn-primary">Edit</a>
                                                     <form action="{{ route('supervisor.members.destroy', $member->id) }}" method="POST" class="d-inline">

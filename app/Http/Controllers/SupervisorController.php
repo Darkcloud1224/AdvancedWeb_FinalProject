@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Volunteer;
 use App\Models\Member;
+use App\Models\User;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,7 +18,6 @@ class SupervisorController extends Controller
         return view('supervisor.index', compact('volunteers', 'members'));
     }
 
-    // CRUD functions for volunteers
 
     public function createVolunteer()
     {
@@ -25,11 +26,24 @@ class SupervisorController extends Controller
 
     public function storeVolunteer(Request $request)
     {
-        Volunteer::create([
-            'name' => $request->name,
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:volunteers',
+            'ic_no' => 'required|string|max:20',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $newVolunteer = new Volunteer;
+        $newVolunteer->name = $request->name;
+        $newVolunteer->email = $request->email;
+        $newVolunteer->ic_no = $request->ic_no;
+        $newVolunteer->password = Hash::make($request->password); 
+        $newVolunteer->save();
+
+        User::create([
             'email' => $request->email,
-            'ic_no' => $request->ic_no,
             'password' => Hash::make($request->password),
+            'roles' => 'volunteer',
         ]);
 
         return redirect()->route('supervisor.index')->with('success', 'New volunteer has been added successfully');
@@ -37,18 +51,34 @@ class SupervisorController extends Controller
 
     public function editVolunteer(Volunteer $volunteer)
     {
-        return view('supervisor.index', compact('volunteer'));
+        return view('supervisor.volunteer.edit', compact('volunteer'));
     }
 
     public function updateVolunteer(Request $request, Volunteer $volunteer)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:volunteers,email,' . $volunteer->id,
+            'ic_no' => 'required|string|max:20',
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
 
-        $data = $request->only(['name', 'email', 'ic_no']);
-        if ($request->password) {
-            $data['password'] = Hash::make($request->password);
+        $volunteer->name = $request->name;
+        $volunteer->email = $request->email;
+        $volunteer->ic_no = $request->ic_no;
+        if ($request->filled('password')) {
+            $volunteer->password = Hash::make($request->password); 
         }
+        $volunteer->save();
 
-        $volunteer->update($data);
+        $user = User::where('email', $volunteer->email)->first();
+        if ($user) {
+            $user->email = $request->email;
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->password);
+            }
+            $user->save();
+        }
 
         return redirect()->route('supervisor.index')->with('success', 'Volunteer details have been updated successfully');
     }
@@ -59,7 +89,6 @@ class SupervisorController extends Controller
         return redirect()->route('supervisor.index')->with('success', 'Volunteer has been deleted successfully');
     }
 
-    // CRUD functions for members
 
     public function createMember()
     {
@@ -77,13 +106,19 @@ class SupervisorController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        Member::create([
-            'name' => $request->name,
+        $newMember = new Member;
+        $newMember->name = $request->name;
+        $newMember->ic_number = $request->ic_number;
+        $newMember->address = $request->address;
+        $newMember->contact = $request->contact;
+        $newMember->email = $request->email;
+        $newMember->password = Hash::make($request->password);
+        $newMember->save();
+
+        User::create([
             'email' => $request->email,
-            'ic_number' => $request->ic_number,
-            'address' => $request->address,
-            'contact' => $request->contact,
             'password' => Hash::make($request->password),
+            'roles' => 'member',
         ]);
 
         return redirect()->route('supervisor.index')->with('success', 'New member has been added successfully');
@@ -91,7 +126,7 @@ class SupervisorController extends Controller
 
     public function editMember(Member $member)
     {
-        return view('supervisor.edit_member', compact('member'));
+        return view('supervisor.member.edit', compact('member'));
     }
 
     public function updateMember(Request $request, Member $member)
@@ -105,12 +140,20 @@ class SupervisorController extends Controller
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
-        $data = $request->only(['name', 'email', 'ic_number', 'address', 'contact']);
-        if ($request->password) {
-            $data['password'] = Hash::make($request->password);
-        }
+        $member->name = $request->name;
+        $member->ic_number = $request->ic_number;
+        $member->address = $request->address;
+        $member->contact = $request->contact;
+        $member->email = $request->email;
+        $member->password = Hash::make($request->password);
+        $member->save();
 
-        $member->update($data);
+        $user = User::where('email', $member->email)->first();
+        if ($user) {
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }
 
         return redirect()->route('supervisor.index')->with('success', 'Member details have been updated successfully');
     }

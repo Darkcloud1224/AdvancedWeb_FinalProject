@@ -6,6 +6,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\SupervisorController;
+use App\Http\Controllers\HomeController;
 use App\Models\Borrowing;
 
 /*
@@ -26,7 +27,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::resource('volunteers', VolunteerController::class);
     Route::resource('books', BookController::class);
     Route::resource('members', MemberController::class);
@@ -50,7 +51,7 @@ Route::middleware(['auth'])->group(function () {
     });*/
 
 
-    Route::resource('supervisor', SupervisorController::class);
+    Route::resource('supervisor', SupervisorController::class)->except(['show']);
     Route::get('/supervisor/volunteers/create', [SupervisorController::class, 'createVolunteer'])->name('supervisor.volunteers.create');
     Route::get('/supervisor/volunteers', [SupervisorController::class, 'index'])->name('supervisor.index');
     Route::post('/supervisor/volunteers', [SupervisorController::class, 'storeVolunteer'])->name('supervisor.volunteers.store');
@@ -58,7 +59,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/supervisor/volunteers/{volunteer}', [SupervisorController::class, 'updateVolunteer'])->name('supervisor.volunteers.update');
     Route::delete('/supervisor/volunteers/{volunteer}', [SupervisorController::class, 'destroyVolunteer'])->name('supervisor.volunteers.destroy');
 
-    // Resource routes for members
     Route::get('/supervisor/members', [SupervisorController::class, 'index'])->name('supervisor.index');
     Route::get('/supervisor/members/create', [SupervisorController::class, 'createMember'])->name('supervisor.members.create');
     Route::post('/supervisor/members', [SupervisorController::class, 'storeMember'])->name('supervisor.members.store');

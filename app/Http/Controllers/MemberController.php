@@ -70,7 +70,6 @@ class MemberController extends Controller
      */
     public function update(Request $request, Member $member)
     {
-
         $member->name = $request->name;
         $member->ic_number = $request->ic_number;
         $member->address = $request->address;
