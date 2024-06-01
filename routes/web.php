@@ -21,7 +21,7 @@ use App\Models\Borrowing;
 */
 
 Route::get('/', function () {
-    return view('landing');
+    return view('auth.login');
 });
 
 Auth::routes();
