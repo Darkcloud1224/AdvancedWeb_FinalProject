@@ -28,7 +28,7 @@ Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::middleware(['auth', 'role:volunteer'])->group(function () {
+    Route::middleware(['role:volunteer'])->group(function () {
         Route::get('/volunteer/dashboard', [VolunteerController::class, 'dashboard'])->name('volunteer.dashboard');
         Route::resource('books', BookController::class);
         Route::resource('members', MemberController::class);
