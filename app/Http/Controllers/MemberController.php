@@ -67,7 +67,11 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
-        return view('members.show', compact('member'));
+        $borrowings = $member->borrowings()->with('book')->get();
+        return response()->json([
+            'member' => $member,
+            'borrowings' => $borrowings
+        ]);
     }
 
     /**

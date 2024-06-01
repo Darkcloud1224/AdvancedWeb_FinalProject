@@ -44,6 +44,7 @@
                                                 <td>{{ $member->ic_number }}</td>
                                                 <td>
                                                     <a href="{{ route('members.edit', $member->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                                    <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#viewMemberModal" data-id="{{ $member->id }}">View</button>
                                                     <form action="{{ route('members.destroy', $member->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
@@ -183,6 +184,30 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="viewMemberModal" tabindex="-1" role="dialog" aria-labelledby="viewMemberModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewMemberModalLabel">Member Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Name:</strong> <span id="memberName"></span></p>
+                        <p><strong>Email:</strong> <span id="memberEmail"></span></p>
+                        <p><strong>IC Number:</strong> <span id="memberICNumber"></span></p>
+                        <hr>
+                        <h5>Borrowing History</h5>
+                        <ul id="borrowingHistory"></ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     
         <script>
             $(document).ready(function() {
@@ -196,6 +221,25 @@
                 var searchForm = document.getElementById('searchForm');
                 searchForm.style.display = searchForm.style.display === 'none' ? 'block' : 'none';
             });
+
+            $('#viewMemberModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var memberId = button.data('id');
+
+            $.ajax({
+                url: '/members/' + memberId,
+                method: 'GET',
+                success: function(data) {
+                    $('#memberName').text(data.member.name);
+                    $('#memberEmail').text(data.member.email);
+                    $('#memberICNumber').text(data.member.ic_number);
+                    $('#borrowingHistory').empty();
+                    data.borrowings.forEach(function(borrowing) {
+                        $('#borrowingHistory').append('<li>' + borrowing.book.title + ' (Borrowed on: ' + borrowing.borrowing_date + ')</li>');
+                    });
+                }
+            });
+        });
         </script>
     @endsection
     
