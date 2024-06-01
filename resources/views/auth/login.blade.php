@@ -188,6 +188,20 @@
         input[type="submit"]:active {
             opacity: 0.8;
         }
+        .error-message {
+            position: absolute;
+            bottom: -20px; 
+            left: 0;
+            color: #ff0000; 
+            font-size: 0.75em; 
+        }
+        .invalid-feedback {
+            color: #ff0000;
+            font-size: 0.75em;
+            position: fixed;
+            padding: 10px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -208,25 +222,28 @@
                             <span>Email</span>
                             <i></i>
                         </div>
+                        @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         <div class="inputBox">
                             <input id="password" type="password" name="password" required autocomplete="current-password">
                             <span>Password</span>
                             <i></i>
                         </div>
-                        <div class="links">
-                            @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}">Forgot Password?</a>
-                            @endif
-                            <a href="{{ route('register') }}">Signup</a>
-                        </div>
+                        @error('password')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         <input type="submit" value="Login">
                     </form>
                 </div>
+                
             </div>
         </div>
     </div>
-
-    <!-- Custom Scripts for Slideshow -->
     <script>
         const slides = document.querySelectorAll('.slideshow img');
         let currentSlide = 0;
@@ -234,7 +251,7 @@
             slides[currentSlide].classList.remove('active');
             currentSlide = (currentSlide + 1) % slides.length;
             slides[currentSlide].classList.add('active');
-        }, 3000); // Change image every 3 seconds
+        }, 3000); 
     </script>
 </body>
 </html>
