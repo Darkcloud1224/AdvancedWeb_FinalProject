@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Volunteer;
 use App\Models\Member;
 use App\Models\User;
-
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -29,8 +29,12 @@ class SupervisorController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:volunteers',
-            'ic_no' => 'required|string|max:20',
+            'ic_no' => 'required|string|min:12|max:12|unique:volunteers,ic_no',
             'password' => 'required|string|min:8|confirmed',
+        ], [
+            'ic_no.unique' => 'The IC number has already been taken.',
+            'ic_no.max' => 'The IC number must be exactly 12 characters long.',
+            'ic_no.min' => 'The IC number must be exactly 12 characters long.',
         ]);
 
         $newVolunteer = new Volunteer;
@@ -54,14 +58,21 @@ class SupervisorController extends Controller
         return view('supervisor.volunteer.edit', compact('volunteer'));
     }
 
-    public function updateVolunteer(Request $request, Volunteer $volunteer)
-    {
+
+public function updateVolunteer(Request $request, Volunteer $volunteer)
+{
+    try {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:volunteers,email,' . $volunteer->id,
-            'ic_no' => 'required|string|max:20',
-            'password' => 'nullable|string|min:8|confirmed',
+            'ic_no' => 'required|string|min:12|max:12|unique:volunteers,ic_no,' . $volunteer->id,
+            'password' => 'nullable|string|min:8',
+        ], [
+            'ic_no.unique' => 'The IC number has already been taken.',
+            'ic_no.max' => 'The IC number must be exactly 12 characters long.',
+            'ic_no.min' => 'The IC number must be exactly 12 characters long.',
         ]);
+        
 
         $volunteer->name = $request->name;
         $volunteer->email = $request->email;
@@ -81,7 +92,16 @@ class SupervisorController extends Controller
         }
 
         return redirect()->route('supervisor.index')->with('success', 'Volunteer details have been updated successfully');
+    } catch (ValidationException $exception) {
+        if ($exception->errors()['ic_no'][0] === 'The ic no must not be greater than 20 characters.') {
+            return redirect()->back()->withErrors(['ic_no' => 'The IC number is too long. Please make sure it is not more than 20 characters.']);
+        } else {
+            throw $exception; // Re-throw the exception if it's not related to the IC number length
+        }
     }
+}
+
+
 
     public function destroyVolunteer(Volunteer $volunteer)
     {
@@ -100,12 +120,16 @@ class SupervisorController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:members',
-            'ic_number' => 'required|string|max:20',
+            'ic_number' => 'required|string|min:12|max:12|unique:members,ic_number',
             'address' => 'required|string|max:255',
             'contact' => 'required|string|max:15',
             'password' => 'required|string|min:8|confirmed',
+        ], [
+            'ic_number.unique' => 'The IC number has already been taken.',
+            'ic_number.max' => 'The IC number must be exactly 12 characters long.',
+            'ic_number.min' => 'The IC number must be exactly 12 characters long.',
         ]);
-
+        
         $newMember = new Member;
         $newMember->name = $request->name;
         $newMember->ic_number = $request->ic_number;
@@ -134,11 +158,16 @@ class SupervisorController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:members,email,' . $member->id,
-            'ic_number' => 'required|string|max:20',
+            'ic_number' => 'required|string|min:12|max:12|unique:members,ic_number,' . $member->id,
             'address' => 'required|string|max:255',
             'contact' => 'required|string|max:15',
             'password' => 'nullable|string|min:8|confirmed',
+        ], [
+            'ic_number.unique' => 'The IC number has already been taken.',
+            'ic_number.max' => 'The IC number must be exactly 12 characters long.',
+            'ic_number.min' => 'The IC number must be exactly 12 characters long.',
         ]);
+        
 
         $member->name = $request->name;
         $member->ic_number = $request->ic_number;

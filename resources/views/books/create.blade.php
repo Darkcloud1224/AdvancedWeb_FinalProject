@@ -8,6 +8,27 @@
                     <div class="card-header">Add Book</div>
 
                     <div class="card-body">
+                        @if ($errors->any())
+                            <div id="toast-container">
+                                @foreach ($errors->all() as $error)
+                                    <div class="toast">{{ $error }}</div>
+                                @endforeach
+                            </div>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const toasts = document.querySelectorAll('.toast');
+                                    toasts.forEach((toast, index) => {
+                                        toast.style.top = `${index * 60}px`; // Adjust this value to increase/decrease spacing between toasts
+                                        setTimeout(() => {
+                                            toast.classList.add('show');
+                                            setTimeout(() => {
+                                                toast.classList.remove('show');
+                                            }, 8000); // Hide after 8 seconds
+                                        }, index * 500); // Staggered appearance
+                                    });
+                                });
+                            </script>
+                        @endif
                         <form action="{{ route('books.store') }}" method="POST">
                             @csrf
                             <div class="form-group">
@@ -30,15 +51,13 @@
                                 <label for="category">Category</label>
                                 <select name="category" id="category" class="form-control" required>
                                     <option value="" disabled selected>Select Category</option>
-                                    <option value="fiction">Fiction</option>
-                                    <option value="non-fiction">Non-Fiction</option>
-                                    <option value="biography">Biography</option>
-                                    <option value="science">Science</option>
-                                    <option value="novel">Novel</option>
-                                    <option value="religion">Religion</option>
-                                    <option value="academic">Academic</option>
-                                    <option value="children">Children</option>
-                                    <option value="general_readings">General Readings</option>
+                                    <option value="Biography">Biography</option>
+                                    <option value="Science">Science</option>
+                                    <option value="Novel">Novel</option>
+                                    <option value="Religion">Religion</option>
+                                    <option value="Academic">Academic</option>
+                                    <option value="Children">Children</option>
+                                    <option value="General_Readings">General Readings</option>
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary">Add Book</button>

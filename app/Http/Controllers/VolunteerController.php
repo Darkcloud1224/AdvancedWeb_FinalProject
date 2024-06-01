@@ -4,15 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Volunteer;
 use App\Models\User;
+use App\Models\Member;
+use App\Models\Book;
+use App\Models\Borrowing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class VolunteerController extends Controller
 {
+    public function dashboard()
+    {
+        $members = Member::all();
+        $books = Book::all();
+        $borrowings = Borrowing::with(['member', 'book'])->get();
+
+        return view('volunteers.landing', compact('members', 'books', 'borrowings'));
+    }
+
     public function index()
     {
         $volunteers = Volunteer::all();
-        return view('volunteers.index', compact('volunteers'));
+        return view('volunteers.landing', compact('volunteers'));
     }
 
     public function create()

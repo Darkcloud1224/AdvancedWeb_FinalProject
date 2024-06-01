@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="container">
-        <!-- Tabs -->
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="volunteers-tab" data-toggle="tab" href="#volunteers" role="tab"
@@ -14,11 +13,8 @@
             </li>
         </ul>
 
-        <!-- Tab Content -->
         <div class="tab-content mt-3" id="myTabContent">
-            <!-- Volunteers Tab -->
             <div class="tab-pane fade show active" id="volunteers" role="tabpanel" aria-labelledby="volunteers-tab">
-                <!-- Volunteers Content -->
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <div class="card">

@@ -31,6 +31,19 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:members',
+            'ic_number' => 'required|string|min:12|max:12|unique:members,ic_number',
+            'address' => 'required|string|max:255',
+            'contact' => 'required|string|max:15',
+            'password' => 'required|string|min:8|confirmed',
+        ], [
+            'ic_number.unique' => 'The IC number has already been taken.',
+            'ic_number.max' => 'The IC number must be exactly 12 characters long.',
+            'ic_number.min' => 'The IC number must be exactly 12 characters long.',
+        ]);
+
         $newMember = new Member;
         $newMember->name = $request->name;
         $newMember->ic_number = $request->ic_number;
@@ -46,7 +59,7 @@ class MemberController extends Controller
             'roles' => 'member',
         ]);
 
-        return redirect()->route('members.index')->with('success', 'New member has been added successfully');
+        return redirect()->route('volunteer.dashboard')->with('success', 'New member has been added successfully');
     }
 
     /**
@@ -70,6 +83,19 @@ class MemberController extends Controller
      */
     public function update(Request $request, Member $member)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:members,email,' . $member->id,
+            'ic_number' => 'required|string|min:12|max:12|unique:members,ic_number,' . $member->id,
+            'address' => 'required|string|max:255',
+            'contact' => 'required|string|max:15',
+            'password' => 'nullable|string|min:8|confirmed',
+        ], [
+            'ic_number.unique' => 'The IC number has already been taken.',
+            'ic_number.max' => 'The IC number must be exactly 12 characters long.',
+            'ic_number.min' => 'The IC number must be exactly 12 characters long.',
+        ]);
+
         $member->name = $request->name;
         $member->ic_number = $request->ic_number;
         $member->address = $request->address;
@@ -85,7 +111,7 @@ class MemberController extends Controller
             $user->save();
         }
 
-        return redirect()->route('members.index')->with('success', 'Member record has been updated successfully');
+        return redirect()->route('volunteer.dashboard')->with('success', 'Member record has been updated successfully');
     }
 
     /**
@@ -99,6 +125,6 @@ class MemberController extends Controller
         }
 
         $member->delete();
-        return redirect()->route('members.index')->with('success', 'Member record has been deleted successfully.');
+        return redirect()->route('volunteer.dashboard')->with('success', 'Member record has been deleted successfully.');
     }
 }

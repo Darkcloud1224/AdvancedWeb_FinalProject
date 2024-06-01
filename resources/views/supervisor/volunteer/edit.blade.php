@@ -8,6 +8,28 @@
                     <div class="card-header">Edit Volunteer</div>
 
                     <div class="card-body">
+                        @if ($errors->any())
+                            <div id="toast-container">
+                                @foreach ($errors->all() as $error)
+                                    <div class="toast">{{ $error }}</div>
+                                @endforeach
+                            </div>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const toasts = document.querySelectorAll('.toast');
+                                    toasts.forEach((toast, index) => {
+                                        toast.style.top = `${index * 60}px`; // Adjust this value to increase/decrease spacing between toasts
+                                        setTimeout(() => {
+                                            toast.classList.add('show');
+                                            setTimeout(() => {
+                                                toast.classList.remove('show');
+                                            }, 8000); // Hide after 8 seconds
+                                        }, index * 500); // Staggered appearance
+                                    });
+                                });
+                            </script>
+                        @endif
+
                         <form action="{{ route('supervisor.volunteers.update', $volunteer->id) }}" method="POST">
                             @csrf
                             @method('PUT')

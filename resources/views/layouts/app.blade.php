@@ -22,6 +22,33 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <style>
+        .toast {
+            visibility: hidden;
+            max-width: 50%;
+            margin: 0 auto;
+            background-color: #f44336;
+            color: white;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 5;
+            right: 10px;
+            top: 30px;
+            font-size: 17px;
+            opacity: 0;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+    
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+    
+    
 </head>
 <body>
     <div id="app">
@@ -83,5 +110,19 @@
             @yield('content')
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toasts = document.querySelectorAll('.toast');
+            toasts.forEach((toast, index) => {
+                setTimeout(() => {
+                    toast.classList.add('show');
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                    }, 8000); // Hide after 8 seconds
+                }, index * 500); // Staggered appearance
+            });
+        });
+    </script>
 </body>
 </html>

@@ -8,6 +8,27 @@
                     <div class="card-header">Edit Book</div>
 
                     <div class="card-body">
+                        @if ($errors->any())
+                            <div id="toast-container">
+                                @foreach ($errors->all() as $error)
+                                    <div class="toast">{{ $error }}</div>
+                                @endforeach
+                            </div>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const toasts = document.querySelectorAll('.toast');
+                                    toasts.forEach((toast, index) => {
+                                        toast.style.top = `${index * 60}px`; // Adjust this value to increase/decrease spacing between toasts
+                                        setTimeout(() => {
+                                            toast.classList.add('show');
+                                            setTimeout(() => {
+                                                toast.classList.remove('show');
+                                            }, 8000); // Hide after 8 seconds
+                                        }, index * 500); // Staggered appearance
+                                    });
+                                });
+                            </script>
+                        @endif
                         <form action="{{ route('books.update', $book->id) }}" method="POST">
                             @csrf
                             @method('PUT')
@@ -33,9 +54,18 @@
                             </div>
                             <div class="form-group">
                                 <label for="category">Category</label>
-                                <input type="text" name="category" id="category" class="form-control"
-                                    value="{{ $book->category }}" required>
+                                <select name="category" id="category" class="form-control" required>
+                                    <option value="" disabled>Select Category</option>
+                                    <option value="Biography" {{ $book->category === 'Biography' ? 'selected' : '' }}>Biography</option>
+                                    <option value="Science" {{ $book->category === 'Science' ? 'selected' : '' }}>Science</option>
+                                    <option value="Novel" {{ $book->category === 'Novel' ? 'selected' : '' }}>Novel</option>
+                                    <option value="Religion" {{ $book->category === 'Religion' ? 'selected' : '' }}>Religion</option>
+                                    <option value="Academic" {{ $book->category === 'Academic' ? 'selected' : '' }}>Academic</option>
+                                    <option value="Children" {{ $book->category === 'Children' ? 'selected' : '' }}>Children</option>
+                                    <option value="General_Readings" {{ $book->category === 'General_Readings' ? 'selected' : '' }}>General Readings</option>
+                                </select>
                             </div>
+                            
                             <button type="submit" class="btn btn-primary">Update Book</button>
                         </form>
                     </div>

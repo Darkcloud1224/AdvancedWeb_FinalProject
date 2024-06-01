@@ -36,7 +36,7 @@ class BorrowingController extends Controller
         $book->is_available = false;
         $book->save();
 
-        return redirect()->route('borrowings.index')->with('success', 'Borrowing added successfully.');
+        return redirect()->route('volunteer.dashboard')->with('success', 'Borrowing added successfully.');
     }
 
     public function edit(Borrowing $borrowing)
@@ -52,7 +52,9 @@ class BorrowingController extends Controller
             'book_id' => 'required|exists:books,id',
             'member_id' => 'required|exists:members,id',
             'borrowing_date' => 'required|date',
-            'returning_date' => 'nullable|date',
+            'returning_date' => 'nullable|date|after:borrowing_date',
+        ], [
+            'returning_date.after' => 'Returning date must be after the borrowing date.',
         ]);
 
         $borrowing->update($request->all());
@@ -63,13 +65,13 @@ class BorrowingController extends Controller
             $book->save();
         }
 
-        return redirect()->route('borrowings.index')->with('success', 'Borrowing updated successfully.');
+        return redirect()->route('volunteer.dashboard')->with('success', 'Borrowing updated successfully.');
     }
 
     public function destroy(Borrowing $borrowing)
     {
         $borrowing->delete();
-        return redirect()->route('borrowings.index')->with('success', 'Borrowing deleted successfully.');
+        return redirect()->route('volunteer.dashboard')->with('success', 'Borrowing deleted successfully.');
     }
 
     public function search(Request $request)
@@ -90,7 +92,7 @@ class BorrowingController extends Controller
             ->get();
 
         if ($borrowings->isEmpty()) {
-            return redirect()->route('borrowings.index')->with('error', 'No borrowing record found for the given criteria.');
+            return redirect()->route('volunteer.dashboard')->with('error', 'No borrowing record found for the given criteria.');
         } else {
             return view('borrowings.index', compact('borrowings'));
         }

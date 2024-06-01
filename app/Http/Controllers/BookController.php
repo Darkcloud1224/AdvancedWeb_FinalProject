@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
 
 class BookController extends Controller
 {
@@ -13,7 +15,7 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::all();
-        return view('books.index', compact('books'));
+        return view('volunteer.dashboard', compact('books'));
     }
 
     /**
@@ -29,7 +31,22 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-    
+        $request->validate([
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('books')->where(function ($query) use ($request) {
+                    return $query->where('author', $request->author)
+                                 ->where('publisher', $request->publisher)
+                                 ->where('published_year', $request->published_year);
+                }),
+            ],
+            'author' => 'required|string|max:255',
+            'publisher' => 'required|string|max:255',
+            'published_year' => 'required|integer|min:1000|max:'.date('Y'),
+            'category' => 'required|string|max:255',
+        ]);
         $newBook = new Book;
         $newBook->title = $request->title;
         $newBook->author = $request->author;
@@ -38,7 +55,7 @@ class BookController extends Controller
         $newBook->category = $request->category;
         $newBook->save();
 
-        return redirect()->route('books.index')->with('success', 'New book has been added successfully');
+        return redirect()->route('volunteer.dashboard')->with('success', 'New book has been added successfully');
     }
 
     /**
@@ -62,6 +79,22 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
+        $request->validate([
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('books')->ignore($book->id)->where(function ($query) use ($request) {
+                    return $query->where('author', $request->author)
+                                 ->where('publisher', $request->publisher)
+                                 ->where('published_year', $request->published_year);
+                }),
+            ],
+            'author' => 'required|string|max:255',
+            'publisher' => 'required|string|max:255',
+            'published_year' => 'required|integer|min:1000|max:'.date('Y'),
+            'category' => 'required|string|max:255',
+        ]);
         $book->title = $request->title;
         $book->author = $request->author;
         $book->publisher = $request->publisher;
@@ -69,7 +102,7 @@ class BookController extends Controller
         $book->category = $request->category;
         $book->save();
 
-        return redirect()->route('books.index')->with('success', 'Book record has been updated successfully');
+        return redirect()->route('volunteer.dashboard')->with('success', 'Book record has been updated successfully');
     }
 
     /**
@@ -78,6 +111,6 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         $book->delete();
-        return redirect()->route('books.index')->with('success', 'Book record has been deleted successfully');
+        return redirect()->route('volunteer.dashboard')->with('success', 'Book record has been deleted successfully');
     }
 }
