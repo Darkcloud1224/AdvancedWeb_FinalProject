@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Borrowing;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -110,7 +111,21 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+        if ($book->borrowings->isNotEmpty()) {
+            $confirmDelete = false;
+            if (request()->has('delete_borrowings') && request()->input('delete_borrowings') === 'on') {
+                $confirmDelete = true;
+            } else {
+                session()->flash('warning', 'Book has associated borrowings. Delete borrowings before deleting the book.');
+            }
+
+            if ($confirmDelete) {
+                Borrowing::where('book_id', $book->id)->delete();
+            }
+        }
+        
         $book->delete();
-        return redirect()->route('volunteer.dashboard')->with('success', 'Book record has been deleted successfully');
+
+        return redirect()->route('volunteer.dashboard')->with('success', 'Book has been deleted successfully.');
     }
 }

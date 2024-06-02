@@ -189,7 +189,25 @@ public function updateVolunteer(Request $request, Volunteer $volunteer)
 
     public function destroyMember(Member $member)
     {
+        $user = User::where('email', $member->email)->first();
+        if ($user) {
+            $user->delete();
+        }
+
+        if ($member->borrowings->isNotEmpty()) {
+            $confirmDelete = false; 
+            if (request()->has('delete_borrowings') && request()->input('delete_borrowings') === 'on') {
+                $confirmDelete = true;
+            } else {
+                session()->flash('warning', 'Member has borrowings. Delete borrowings before deleting the member.');
+            }
+
+            if ($confirmDelete) {
+                $member->borrowings()->delete();
+            }
+        }
         $member->delete();
+
         return redirect()->route('supervisor.index')->with('success', 'Member has been deleted successfully');
     }
 }

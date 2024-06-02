@@ -128,7 +128,21 @@ class MemberController extends Controller
             $user->delete();
         }
 
+        if ($member->borrowings->isNotEmpty()) {
+            $confirmDelete = false; 
+            if (request()->has('delete_borrowings') && request()->input('delete_borrowings') === 'on') {
+                $confirmDelete = true;
+            } else {
+                session()->flash('warning', 'Member has borrowings. Delete borrowings before deleting the member.');
+            }
+
+            if ($confirmDelete) {
+                $member->borrowings()->delete();
+            }
+        }
         $member->delete();
+
         return redirect()->route('volunteer.dashboard')->with('success', 'Member record has been deleted successfully.');
     }
+
 }

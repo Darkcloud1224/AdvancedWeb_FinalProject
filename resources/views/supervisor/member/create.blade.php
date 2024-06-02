@@ -1,6 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    /* Global Styles */
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+    }
+    body {
+        background: #23242a;
+        color: #fff;
+    }
+    .card {
+        background: #28292d;
+        color: #fff;
+        margin-top: 20px;
+    }
+    .card-header {
+        background: #1c1c1c;
+        border-bottom: 1px solid #333;
+        color: #45f3ff;
+    }
+    .card-body {
+        padding: 1.25rem;
+    }
+    .btn-primary {
+        background-color: #3bb3f2;
+        border-color: #3bb3f2;
+    }
+    .btn-primary:hover {
+        background-color: #45f3ff;
+        border-color: #45f3ff;
+    }
+    .form-group label {
+        color: #45f3ff;
+    }
+    .form-control {
+        background-color: #1c1c1c;
+        color: #fff;
+        border-color: #444;
+    }
+    .form-control:focus {
+        background-color: #1c1c1c;
+        color: #fff;
+        border-color: #45f3ff;
+        box-shadow: 0 0 0 0.2rem rgba(69, 243, 255, 0.25);
+    }
+</style>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">

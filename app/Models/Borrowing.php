@@ -10,7 +10,7 @@ class Borrowing extends Model
     use HasFactory;
 
     protected $fillable = [
-        'book_id', 'member_id', 'borrowing_date', 'returning_date',
+        'book_id', 'member_id', 'borrowing_date', 'returning_date', 'member_name', 'book_title',
     ];
 
     protected $dates = [

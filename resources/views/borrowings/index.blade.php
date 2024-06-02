@@ -54,7 +54,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $borrowing->book->title }}</td>
-                                        <td>{{ $borrowing->member->name }}</td>
+                                        <td>{{ $borrowing->member ? $borrowing->member->name : 'N/A' }}</td>
                                         <td>{{ $borrowing->borrowing_date }}</td>
                                         <td>{{ $borrowing->returning_date }}</td>
                                         <td>

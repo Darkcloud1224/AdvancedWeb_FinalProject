@@ -30,9 +30,17 @@ class BorrowingController extends Controller
             'borrowing_date' => 'required|date',
         ]);
 
-        $borrowing = Borrowing::create($request->all());
-
+        $member = Member::findOrFail($request->member_id);
         $book = Book::find($request->book_id);
+
+        $borrowing = Borrowing::create([
+            'book_id' => $request->book_id,
+            'member_id' => $request->member_id,
+            'borrowing_date' => $request->borrowing_date,
+            'member_name' => $member->name, 
+            'book_title' => $book->title,
+        ]);
+
         $book->is_available = false;
         $book->save();
 
