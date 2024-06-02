@@ -1,6 +1,84 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    /* Global Styles */
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+    }
+    body {
+        background: #23242a;
+    }
+    .container {
+        margin-top: 20px;
+    }
+
+    /* Tab Styles */
+    .nav-tabs .nav-link {
+        color: #45f3ff;
+        border: none;
+        border-bottom: 2px solid transparent;
+    }
+    .nav-tabs .nav-link.active {
+        border-color: #45f3ff;
+    }
+
+    /* Card Styles */
+    .card {
+        background: #28292d;
+        color: #fff;
+    }
+    .card-header {
+        background: #1c1c1c;
+        border-bottom: 1px solid #333;
+        color: #45f3ff;
+    }
+    .card-body {
+        padding: 1.25rem;
+    }
+    .btn:hover {
+        background-color: #3bb3f2;
+    }
+
+    /* Table Styles */
+    .table {
+        background: #000;
+        color: #45f3ff;
+    }
+    .table th {
+        border-color: #333;
+        color: #45f3ff;
+    }
+    .table td {
+        border-color: #444;
+        color: #45f3ff;
+    }
+    .table th,
+    .table td {
+        padding: 0.75rem;
+    }
+
+    /* Modal Styles */
+    .modal-content {
+        background: #1c1c1c;
+        color: #fff;
+    }
+    .modal-header {
+        border-bottom: 1px solid #333;
+        background: #1c1c1c;
+        color: #45f3ff;
+    }
+    .modal-body {
+        padding: 1.25rem;
+    }
+    .modal-footer {
+        border-top: 1px solid #333;
+        background: #1c1c1c;
+    }
+</style>
     <div class="container">
         <ul class="nav nav-tabs" id="volunteerTab" role="tablist">
             <li class="nav-item">
@@ -20,7 +98,7 @@
         <div class="tab-content mt-3" id="volunteerTabContent">
             <div class="tab-pane fade show active" id="members" role="tabpanel" aria-labelledby="members-tab">
                 <div class="row justify-content-center">
-                    <div class="col-md-8">
+                    <div class="col-md-10">
                         <div class="card">
                             <div class="card-header">Members</div>
                             <div class="card-body">
@@ -32,6 +110,7 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>IC Number</th>
+                                            <th>Contact Number</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -42,14 +121,22 @@
                                                 <td>{{ $member->name }}</td>
                                                 <td>{{ $member->email }}</td>
                                                 <td>{{ $member->ic_number }}</td>
+                                                <td>{{ $member->contact }}</td>
                                                 <td>
                                                     <a href="{{ route('members.edit', $member->id) }}" class="btn btn-sm btn-primary">Edit</a>
                                                     <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#viewMemberModal" data-id="{{ $member->id }}">View</button>
-                                                    <form action="{{ route('members.destroy', $member->id) }}" method="POST" class="d-inline">
+                                                    <form id="deleteForm{{ $member->id }}" action="{{ route('members.destroy', $member->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this member?')">Delete</button>
+                                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this volunteer?')">Delete</button>
+                                                        @if($member->borrowings()->count() > 0)
+                                                            <div class="form-check mt-2">
+                                                                <input type="checkbox" name="delete_borrowings" id="delete_borrowings" class="form-check-input">
+                                                                <label for="delete_borrowings" class="form-check-label">Delete Borrowings</label>
+                                                            </div>
+                                                        @endif
                                                     </form>
+                                                                                                    
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -63,7 +150,7 @@
 
             <div class="tab-pane fade" id="books" role="tabpanel" aria-labelledby="books-tab">
                 <div class="row justify-content-center">
-                    <div class="col-md-8">
+                    <div class="col-md-10">
                         <div class="card">
                             <div class="card-header">Books</div>
                             <div class="card-body">
@@ -92,13 +179,17 @@
                                                 <td>
                                                     <a href="{{ route('books.edit', $book->id) }}"
                                                         class="btn btn-sm btn-primary">Edit</a>
-                                                    <form action="{{ route('books.destroy', $book->id) }}" method="POST"
-                                                        class="d-inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger"
-                                                            onclick="return confirm('Are you sure you want to delete this book?')">Delete</button>
-                                                    </form>
+                                                        <form id="deleteBookForm" action="{{ route('books.destroy', $book->id) }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this book?')">Delete</button>
+                                                            @if($book->borrowings()->count() > 0)
+                                                                <div class="form-check mt-2">
+                                                                    <input type="checkbox" name="delete_borrowings" id="delete_borrowings" class="form-check-input">
+                                                                    <label for="delete_borrowings" class="form-check-label">Delete Borrowings</label>
+                                                                </div>
+                                                            @endif
+                                                        </form>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -157,8 +248,8 @@
                                             @forelse ($borrowings as $borrowing)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $borrowing->book->title }}</td>
-                                                    <td>{{ $borrowing->member->name }}</td>
+                                                    <td>{{ $borrowing->book_title }}</td>
+                                                    <td>{{ $borrowing->member_name }}</td>
                                                     <td>{{ $borrowing->borrowing_date }}</td>
                                                     <td>{{ $borrowing->returning_date }}</td>
                                                     <td>
@@ -242,4 +333,3 @@
         });
         </script>
     @endsection
-    

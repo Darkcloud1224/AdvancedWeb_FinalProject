@@ -46,13 +46,68 @@
             visibility: visible;
             opacity: 1;
         }
+
+        /* Navbar Styles */
+    .navbar {
+        font-family: 'Nunito', sans-serif;
+        font-size: 1rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .navbar-toggler {
+        border: none;
+    }
+
+    .navbar-nav .nav-item {
+        margin-left: 15px;
+    }
+
+    .navbar-nav .nav-link {
+        color: #555;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: #007bff;
+    }
+
+    .dropdown-menu {
+        border: none;
+        border-radius: 0.25rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    .dropdown-item {
+        color: #555;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .user-name {
+        font-weight: 500;
+    }
+
+    /* Utility classes */
+    .bg-light {
+        background-color: #1c1c1c !important;
+    }
     </style>
     
     
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md  shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
