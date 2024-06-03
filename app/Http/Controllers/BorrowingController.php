@@ -87,7 +87,7 @@ class BorrowingController extends Controller
         $searchBy = $request->input('searchBy');
         $searchTerm = $request->input('searchTerm');
 
-        $borrowings = Borrowing::query()
+        $borrowingsQuery = Borrowing::query()
             ->when($searchBy === 'book_id', function ($query) use ($searchTerm) {
                 $query->where('book_id', $searchTerm);
             })
@@ -95,14 +95,14 @@ class BorrowingController extends Controller
                 $query->whereHas('member', function ($query) use ($searchTerm) {
                     $query->where('ic_number', $searchTerm);
                 });
-            })
-            ->with('book', 'member')
-            ->get();
+            });
+
+        $borrowings = $borrowingsQuery->with('book', 'member')->get();
 
         if ($borrowings->isEmpty()) {
             return redirect()->route('volunteer.dashboard')->with('error', 'No borrowing record found for the given criteria.');
         } else {
-            return view('borrowings.index', compact('borrowings'));
+            return view('borrowings.index')->with(compact('borrowings'));
         }
     }
 

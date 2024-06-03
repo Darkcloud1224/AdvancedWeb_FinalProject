@@ -32,7 +32,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/volunteer/dashboard', [VolunteerController::class, 'dashboard'])->name('volunteer.dashboard');
         Route::resource('books', BookController::class);
         Route::resource('members', MemberController::class);
-        Route::resource('borrowings', BorrowingController::class);
         Route::controller(BorrowingController::class)->group(function () {
             Route::get('/borrowings', 'index')->name('borrowings.index');
             Route::get('/borrowings/create', 'create')->name('borrowings.create');

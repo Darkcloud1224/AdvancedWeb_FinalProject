@@ -179,17 +179,17 @@
                                                 <td>
                                                     <a href="{{ route('books.edit', $book->id) }}"
                                                         class="btn btn-sm btn-primary">Edit</a>
-                                                        <form id="deleteBookForm" action="{{ route('books.destroy', $book->id) }}" method="POST" class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this book?')">Delete</button>
-                                                            @if($book->borrowings()->count() > 0)
-                                                                <div class="form-check mt-2">
-                                                                    <input type="checkbox" name="delete_borrowings" id="delete_borrowings" class="form-check-input">
-                                                                    <label for="delete_borrowings" class="form-check-label">Delete Borrowings</label>
-                                                                </div>
-                                                            @endif
-                                                        </form>
+                                                    <form id="deleteBookForm" action="{{ route('books.destroy', $book->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this book?')">Delete</button>
+                                                        @if($book->borrowings()->count() > 0)
+                                                            <div class="form-check mt-2">
+                                                                <input type="checkbox" name="delete_borrowings" id="delete_borrowings" class="form-check-input">
+                                                                <label for="delete_borrowings" class="form-check-label">Delete Borrowings</label>
+                                                            </div>
+                                                        @endif
+                                                    </form>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -299,21 +299,22 @@
                 </div>
             </div>
         </div>
-    
-        <script>
-            $(document).ready(function() {
-                $('#volunteerTab a').on('click', function (e) {
-                    e.preventDefault();
-                    $(this).tab('show');
-                });
-            });
-    
-            document.getElementById('toggleSearchBtn').addEventListener('click', function() {
-                var searchForm = document.getElementById('searchForm');
-                searchForm.style.display = searchForm.style.display === 'none' ? 'block' : 'none';
-            });
+    </div>
 
-            $('#viewMemberModal').on('show.bs.modal', function (event) {
+    <script>
+        $(document).ready(function() {
+            $('#volunteerTab a').on('click', function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+        });
+
+        document.getElementById('toggleSearchBtn').addEventListener('click', function() {
+            var searchForm = document.getElementById('searchForm');
+            searchForm.style.display = searchForm.style.display === 'none' ? 'block' : 'none';
+        });
+
+        $('#viewMemberModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var memberId = button.data('id');
 
@@ -331,5 +332,22 @@
                 }
             });
         });
-        </script>
-    @endsection
+
+        $(document).ready(function() {
+            var activeTab = localStorage.getItem('activeTab');
+            if (activeTab) {
+                $('#volunteerTab a[href="' + activeTab + '"]').tab('show');
+            }
+
+            $('#volunteerTab a').on('click', function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+
+                 var tabId = $(this).attr('href');
+                localStorage.setItem('activeTab', tabId);
+            });
+        });
+    </script>
+@endsection
+
+

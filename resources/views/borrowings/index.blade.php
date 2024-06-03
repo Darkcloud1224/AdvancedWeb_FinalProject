@@ -1,6 +1,57 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    /* Global Styles */
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+    }
+    body {
+        background: #23242a;
+    }
+    .container {
+        margin-top: 20px;
+    }
+
+    /* Card Styles */
+    .card {
+        background: #28292d;
+        color: #fff;
+    }
+    .card-header {
+        background: #1c1c1c;
+        border-bottom: 1px solid #333;
+        color: #45f3ff;
+    }
+    .card-body {
+        padding: 1.25rem;
+    }
+    .btn:hover {
+        background-color: #3bb3f2;
+    }
+
+    /* Table Styles */
+    .table {
+        background: #000;
+        color: #45f3ff;
+    }
+    .table th {
+        border-color: #333;
+        color: #45f3ff;
+    }
+    .table td {
+        border-color: #444;
+        color: #45f3ff;
+    }
+    .table th,
+    .table td {
+        padding: 0.75rem;
+    }
+
+</style>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
@@ -8,35 +59,7 @@
                     <div class="card-header">Borrowings</div>
 
                     <div class="card-body">
-
-                        <a href="{{ route('borrowings.create') }}" class="btn btn-primary mb-3">Add Borrowing</a>
-
-                        @if(session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                        @endif
-
-                        <div class="mb-3">
-                            <button class="btn btn-primary" id="toggleSearchBtn">Search</button>
-                        </div>
-
-                        <div id="searchForm" style="display: none;">
-                            <form action="{{ route('borrowings.search') }}" method="GET">
-                                <div class="form-group">
-                                    <label for="searchBy">Search By:</label>
-                                    <select name="searchBy" id="searchBy" class="form-control">
-                                        <option value="book_id">Book ID</option>
-                                        <option value="ic_number">Borrower's IC Number</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="searchTerm">Search Term:</label>
-                                    <input type="text" name="searchTerm" id="searchTerm" class="form-control" placeholder="Enter search term" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Search</button>
-                            </form>
-                        </div>
+                        <a href="{{ url()->previous() }}" class="btn btn-primary mb-3">Back</a>
 
                         <table class="table mt-3">
                             <thead>
@@ -79,10 +102,4 @@
         </div>
     </div>
 
-    <script>
-        document.getElementById('toggleSearchBtn').addEventListener('click', function() {
-            var searchForm = document.getElementById('searchForm');
-            searchForm.style.display = searchForm.style.display === 'none' ? 'block' : 'none';
-        });
-    </script>
 @endsection
