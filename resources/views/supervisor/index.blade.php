@@ -160,7 +160,7 @@
                                                 <td>{{ $member->ic_number }}</td>
                                                 <td>
                                                     <a href="{{ route('supervisor.members.edit', $member->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                                                    <form id="deleteForm{{ $member->id }}" action="{{ route('members.destroy', $member->id) }}" method="POST" class="d-inline">
+                                                    <form id="deleteForm{{ $member->id }}" action="{{ route('supervisor.members.destroy', $member->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this volunteer?')">Delete</button>
@@ -186,10 +186,18 @@
 
     <script>
         $(document).ready(function() {
-            $('#myTab a').on('click', function (e) {
-                e.preventDefault();
-                $(this).tab('show');
-            });
+        var activeTab = localStorage.getItem('activeTab');
+        if (activeTab) {
+            $('.nav-link[href="' + activeTab + '"]').tab('show');
+        }
+
+        $('.nav-link').on('click', function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+
+            var tabId = $(this).attr('href');
+            localStorage.setItem('activeTab', tabId);
         });
+    });
     </script>
 @endsection
