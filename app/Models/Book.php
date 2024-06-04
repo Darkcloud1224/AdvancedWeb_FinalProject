@@ -10,7 +10,7 @@ class Book extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'author', 'publisher', 'published_year', 'category', 'is_available',
+        'id','title', 'author', 'publisher', 'published_year', 'category', 'is_available',
     ];
 
     public function borrowings()

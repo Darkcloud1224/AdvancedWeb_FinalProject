@@ -159,6 +159,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Book ID</th>
                                             <th>Title</th>
                                             <th>Author</th>
                                             <th>Publisher</th>
@@ -171,6 +172,7 @@
                                         @foreach ($books as $book)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $book->id }}</td>
                                                 <td>{{ $book->title }}</td>
                                                 <td>{{ $book->author }}</td>
                                                 <td>{{ $book->publisher }}</td>

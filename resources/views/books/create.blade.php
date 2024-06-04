@@ -66,13 +66,13 @@
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const toasts = document.querySelectorAll('.toast');
                                     toasts.forEach((toast, index) => {
-                                        toast.style.top = `${index * 60}px`; // Adjust this value to increase/decrease spacing between toasts
+                                        toast.style.top = `${index * 60}px`; 
                                         setTimeout(() => {
                                             toast.classList.add('show');
                                             setTimeout(() => {
                                                 toast.classList.remove('show');
-                                            }, 8000); // Hide after 8 seconds
-                                        }, index * 500); // Staggered appearance
+                                            }, 8000); 
+                                        }, index * 500); 
                                     });
                                 });
                             </script>

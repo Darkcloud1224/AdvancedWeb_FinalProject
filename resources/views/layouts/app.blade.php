@@ -4,23 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- Bootstrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-    <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
     <style>
@@ -47,7 +41,6 @@
             opacity: 1;
         }
 
-        /* Navbar Styles */
     .navbar {
         font-family: 'Nunito', sans-serif;
         font-size: 1rem;
@@ -97,7 +90,6 @@
         font-weight: 500;
     }
 
-    /* Utility classes */
     .bg-light {
         background-color: #1c1c1c !important;
     }
@@ -117,14 +109,11 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
 
                     </ul>
 
-                    <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -174,8 +163,8 @@
                     toast.classList.add('show');
                     setTimeout(() => {
                         toast.classList.remove('show');
-                    }, 8000); // Hide after 8 seconds
-                }, index * 500); // Staggered appearance
+                    }, 8000); 
+                }, index * 500); 
             });
         });
     </script>
